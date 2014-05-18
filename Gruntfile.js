@@ -1,3 +1,4 @@
+
 module.exports = function(grunt) {
 
   grunt.initConfig({
@@ -20,7 +21,9 @@ module.exports = function(grunt) {
       },
       options: {
         ignore: ['node_modules/**',
-        'bower_components/**']
+        'bower_components/**',
+        'public/**'],
+        watchedExtensions: ['js']
       }
     },
 
@@ -40,25 +43,45 @@ module.exports = function(grunt) {
         ]
       }
     },
+    concurrent: {
+      target: {
+        tasks: ['watch', 'nodemon'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
 
     cssmin: {
     },
-
+    less: {
+      development: {
+        options: {
+          paths: ["public/stylesheets/"],
+          yuicompress: true
+        },
+        files: {
+          "public/stylesheets/style.css": "public/stylesheets/style.less"
+        }
+      }
+    },
     watch: {
       scripts: {
         files: [
           'public/javascripts/*.js',
           'app.js',
-          'app-config.js'
-        ],
-        tasks: [
-          'concat',
-          'uglify'
+          'app-config.js',
+          'server/**/*.js'
         ]
+        // ,
+        // tasks: [
+        //   'concat',
+        //   'uglify'
+        // ]
       },
       css: {
-        files: 'public/stylesheets/*.css',
-        tasks: ['cssmin']
+        files: 'public/stylesheets/*',
+        tasks: ['less']
       }
     },
 
@@ -72,23 +95,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
 
-  grunt.registerTask('server-dev', function (target) {
-    // Running nodejs in a different process and displaying output on the main console
-    var nodemon = grunt.util.spawn({
-         cmd: 'grunt',
-         grunt: true,
-         args: 'nodemon'
-    });
-    nodemon.stdout.pipe(process.stdout);
-    nodemon.stderr.pipe(process.stderr);
-
-    grunt.task.run([ 'watch' ]);
-  });
 
   ////////////////////////////////////////////////////
   // Main grunt tasks
@@ -100,20 +113,12 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'jshint',
-    'nodemon'
+    'less',
+    'concurrent'
   ]);
-
-  grunt.registerTask('upload', function(n) {
-    if(grunt.option('prod')) {
-      // add your production server task here
-    } else {
-      grunt.task.run([ 'server-dev' ]);
-    }
-  });
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
   ]);
-
 
 };

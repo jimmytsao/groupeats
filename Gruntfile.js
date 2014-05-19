@@ -34,7 +34,9 @@ module.exports = function(grunt) {
       files: [
           'public/javascripts/*.js',
           'app.js',
-          'app-config.js'
+          'app-config.js',
+          'server/**/*.js',
+          'db/**/*.js'
       ],
       options: {
         force: false,
@@ -71,7 +73,8 @@ module.exports = function(grunt) {
           'public/javascripts/*.js',
           'app.js',
           'app-config.js',
-          'server/**/*.js'
+          'server/**/*.js',
+          'db/**/*.js'
         ]
         // ,
         // tasks: [

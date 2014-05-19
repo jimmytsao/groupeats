@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GroupEats</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    
+    <div class='header'>
+      <div class='sitename'>
+        <h1>groupeats</h1>
+      </div>
+      <div class='login'>
+        <form action='/login' method='POST'>
+          <input type='text' name='username' placeholder='Username'>
+          <input type='text' name='password' placeholder='Password'>
+          <input type='submit' value='Login'>
+        </form>
+      </div>
+    </div>
+
+    <div class='content'>
+      <div class='info'>Page Info</div>
+      <div class='signup'>
+        Signup Here:
+        <form action='/signup' method='POST'>
+          <div><input type='text' name='firstName' placeholder='First Name'></div>
+          <div><input type='text' name='lastName' placeholder='Last Name'></div>
+          <div><input type='text' name='email' placeholder='Email'></div>
+          <div><input type='text' name='phoneNumber'placeholder='Phone Number'></div>
+          <div><input type='text' name='username' placeholder='Username'></div>
+          <div><input type='text' name='password' placeholder='Password'></div>
+          <div><input type='submit' value='Submit'></div>
+        </form>
+      </div>
+    </div>
+
+  </body>
+</html>

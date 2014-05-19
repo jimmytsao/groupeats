@@ -1,7 +1,8 @@
 
 var express = require('express');
 var partials = require('express-partials');
-var handler = require('./server/handler.js');
+var userHandler = require('./server/userHandler.js');
+var busHandler = require('./server/busHandler.js');
 var dbConnect = require('./db/db-config.js');
 var app = express();
 
@@ -16,8 +17,15 @@ app.configure(function() {
   app.use(express.session());
 });
 
-app.get('/', handler.sendIndex);
-app.post('/login', handler.login);
-app.post('/signup', handler.signup);
+//user routes
+app.get('/', userHandler.sendIndex);
+app.post('/login', userHandler.login);
+app.post('/signup', userHandler.signup);
+
+
+//business routes
+app.get('/business', busHandler.sendBusIndex);
+app.post('/business/login', busHandler.login);
+app.post('/business/signup', busHandler.signup);
 
 module.exports = app;

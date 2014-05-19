@@ -10,8 +10,8 @@
       <div class='sitename'>
         <h1>groupeats</h1>
       </div>
-      <div class='login'>
-        <form action='/login' method='POST'>
+      <div class='business/login'>
+        <form action='/business/login' method='POST'>
           <input type='text' name='username' placeholder='Username'>
           <input type='text' name='password' placeholder='Password'>
           <input type='submit' value='Login'>
@@ -21,10 +21,15 @@
     </div>
 
     <div class='content'>
-      <div class='info'>Page Info</div>
+      <div class='info'>Business Users</div>
       <div class='signup'>
-        Signup Here:
-        <form action='/signup' method='POST'>
+        Business Signup:
+        <form action='/business/signup' method='POST'>
+          <div><input type='text' name='businessName' placeholder='Business Name'></div>
+          <div><input type='text' name='address' placeholder='Business Address'></div>
+          <div><input type='text' name='city' placeholder='City'></div>
+          <div><input type='text' name='state' placeholder='State'></div>
+          <div><input type='text' name='zipCode' placeholder='Zip Code'></div>
           <div><input type='text' name='firstName' placeholder='First Name'></div>
           <div><input type='text' name='lastName' placeholder='Last Name'></div>
           <div><input type='text' name='email' placeholder='Email'></div>

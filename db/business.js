@@ -81,11 +81,12 @@ Business.blueAggregate([{
   $geoNear: {
     near: [-122.415094,37.773899],
     distanceField: 'dist.calculated',
-    maxDistance: 27/3963,
+    maxDistance: 1900/3963,
     spherical: true
   }
 }])
 .then(function(result){
+  // console.log(result);
 })
 
 exports.Business = Business;

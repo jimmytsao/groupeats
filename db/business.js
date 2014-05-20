@@ -96,5 +96,7 @@ Business.promFindNearby = function(argsArray){
   }]);
 };
 
+// 
+
 exports.Business = Business;
 

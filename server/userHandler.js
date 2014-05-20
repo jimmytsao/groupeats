@@ -128,6 +128,7 @@ exports.request = function(req,res){
   //convert response to Long/Lat
   .then(mapApi.parseGeoResult)
 
+  //add long/lat results to location parameter on obj and save
   .then(function(result){
     requestObj.location = result;
     requestObj.save(function(err, data){
@@ -136,54 +137,37 @@ exports.request = function(req,res){
       }
     });
 
+    //create new promise to continue chain
     return new blue (function(resolve, reject){
       resolve([requestObj.location, requestObj.radius]);
     });
   })
 
+  //find businesses nearby the request location
   .then(Business.promFindNearby)
 
+  //parse and format the data
   .then(misc.parseNearbyData)
 
+  //store the data as a parameter on the request Obj and save
   .then(function(data){
     requestObj.businesses = data[0];
 
     requestObj.save(function(err, data){
       if(err){
-        console.log('2nd SAVE ERROR: ', err);
+        console.log('3rd SAVE ERROR: ', err);
       }
       console.log('3rd Save Data: ', data);
     })
+
+    //create new promise to continue chain
+    return new blue (function(resolve, reject){
+      resolve([data[1] ,requestObj]);
+    });
   })
 
+  .then(twilio.massTwilSend);
+  
   res.send(200, 'check request');
-
-  // mapApi.getGeo(requestObj)
-
-  // //convert response to Long/Lat
-  // .then(mapApi.parseGeoResult)
-
-  // //update Long/Lat coordinates to location property
-  // .then(function(result){
-  //   requestObj.location = result;
-
-  //   //make a promise that resolves with the result and miles
-  //   return new blue (function(resolve, reject){
-  //     resolve([requestObj.location, requestObj.radius]);
-  //   });
-  // })
-
-  // //find restaurants that meet search criteria
-  // .then(Business.promFindNearby)
-
-  // //parse the data for storage and generate list of nums to send text
-  // .then(misc.parseNearbyData)
-
-  // .then(function(data){
-  //   request.Obj.businesses = data[0];
-
-  //   //TODO - finish after setting up the model
-  //   res.send('201', JSON.stringify(data));
-  // })
 
 };

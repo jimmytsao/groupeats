@@ -44,7 +44,14 @@ exports.parseRequestFormData = function(obj){
   return parsedObj;
  }
 
+exports.formatDate = function(date){
+  var month = date.getMonth()+1;
+  var day = date.getDate()+1;
+  var hours = date.getHours();
+  var min = date.getMinutes();
 
+  return month+'/'+day+' @ '+hours+':'+min;
+}
 
 
 

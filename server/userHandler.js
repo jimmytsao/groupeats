@@ -113,11 +113,13 @@ exports.request = function(req,res){
     parsed.requestId = data.count;
     requestObj = new UserRequest(parsed);
 
+    //promisifying the save function
     requestObj.promSave = blue.promisify(requestObj.save);
 
     return requestObj.promSave();
   })
 
+  //create new promise to continue chain
   .then(function(){
     return new blue(function(resolve,reject){
       resolve(parsed);
@@ -137,20 +139,12 @@ exports.request = function(req,res){
     return requestObj.promSave();
   })
 
+  //create new promise to continue chain
   .then(function(){
     return new blue (function(resolve, reject){
       resolve([requestObj.location, requestObj.radius]);
     })
   })
-
-    // requestObj.save(function(err, data){
-    //   if(err){
-    //     console.log('2nd SAVE ERROR: ', err);
-    //   }
-    // });
-
-    //create new promise to continue chain
-
 
   //find businesses nearby the request location
   .then(Business.promFindNearby)
@@ -165,14 +159,14 @@ exports.request = function(req,res){
     return requestObj.promSave();
   })
 
-    //create new promise to continue chain
+  //create new promise to continue chain
   .then(function(){
     return new blue (function(resolve, reject){
       resolve([numbers, requestObj]);
     });
   })
 
-  //TODO: UNCOMMENT!
+  //send text messages
   .then(twilio.massTwilSend);
   
   res.send(200, 'check request');

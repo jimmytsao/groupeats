@@ -1,6 +1,7 @@
 
 var UserRequest = require('../db/userRequest.js').UserRequest;
-  
+var blue = require('bluebird');
+
 exports.processPost = function(req, res, next){
 
   var body = parseBody(req.body.Body);
@@ -12,32 +13,44 @@ exports.processPost = function(req, res, next){
   var num = parseNumber(req.body.From);
   var requestId = {requestId: body[0]};
   var offer = body[1];
+  var updatedBusinesses;
 
-  UserRequest.promFindOneAndUpdate(
-    query,
-    {$set: 
-      {
-        'businesses.$.status': 'Accepted',
-        'businesses.$.replies': [offer]
-      }
-    },
-    {new: true},
-    function(err, data){
-      if(err){
-        console.log('error updating data');
-      }
-      console.log('data ',data);
-    }
-  );
+  UserRequest.promFindOne({requestId: body[0]}) 
+  .then(function(data){
+    updatedBusinesses = updateBusiness(data.businesses, num, offer);
 
-  UserRequest.findOne({requestId: body[0]}, function(err,data){
-    if(err){
-      console.log('found error');
-    }
-    console.log('data: ',data.businesses);
+    return new blue(function(resolve, reject){
+      resolve(updatedBusinesses);
+    })
+  })
+
+  .then(function(){
+    return UserRequest.promFindOneAndUpdate(
+      {requestId: body[0]},
+      {$set: {businesses: updatedBusinesses}},
+      {new: true}
+    );
+  })
+
+  .then(function(data){
+
+    sendXml(res, 'Heres my offer: '+offer);
   })
 };
 
+var updateBusiness = function(str, num, offer){
+
+  var bus = JSON.parse(str);
+
+  for (var i = 0; i<bus.length; i++){
+    if (bus[i].phoneNumber*1 === num*1){
+      bus[i].status = 'Accepted',
+      bus[i].replies = offer;
+    }
+  }
+
+  return JSON.stringify(bus);
+}
 
 var parseNumber = function(from){
   return from.slice(2)*1;
@@ -57,16 +70,18 @@ var parseBody = function(body){
   return [reqId, offer];
 };
 
-var sendXml = function(req,res,next){
+var sendXml = function(res,msg){
 
-  var xml = '<?xml version="1.0" encoding="UTF-8" ?><Response><Message>Received: '+ JSON.stringify(req.body.Body) +' Rest of Message: '+ JSON.stringify(req.body)+'</Message></Response>';
+  var xml = '<?xml version="1.0" encoding="UTF-8" ?><Response><Message>Received: '+msg+'</Message></Response>';
   res.header('Content-Type','text/xml').send(xml);
 };
 
 // var test = {}
 // test.body={}
-// test.body.Body = '(55) # 10%off';
+// test.body.Body = '(79) # 10%off';
 // test.body.From = '+13124794923';
+
+// exports.processPost(test);
 
 
 

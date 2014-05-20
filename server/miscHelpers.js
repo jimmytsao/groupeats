@@ -12,7 +12,7 @@ exports.parseNearbyData = function(array){
     bus.phoneNumber = array[i].phoneNumber;
     bus.distance = array[i].dist.calculated*3963;
     bus.status = 'Pending';
-    bus.replies = [];
+    bus.replies = null;
 
     allBus.push(bus);
     phoneNums.push(array[i].phoneNumber);

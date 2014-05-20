@@ -23,7 +23,6 @@ app.controller('contentCtrl', function($scope, $http){
 
   $scope.acceptOffer = function(id, rest){
 
-    console.log('id: ', id, 'rest: ', rest)
     var postData = {requestId: id, businessName: rest};
 
     $http({
@@ -34,8 +33,7 @@ app.controller('contentCtrl', function($scope, $http){
 
     }).success(function(data, status) {
       // $scope.details = data;
-      console.log('successful data and status: ',data, status);
-      console.log('type: ', typeof data);
+      alert('A confirmation message has been sent to the restaurant. Thanks for using GroupEats!');
 
     }).error(function(data, status){
       console.log('unsuccessful error getting data', data, status);

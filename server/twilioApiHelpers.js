@@ -24,7 +24,6 @@ exports.massTwilSend = function(array){
   for (var i = 0; i<numbers.length; i++){
 
     formattedNumber='+1'+numbers[i];
-    console.log(formattedNumber, 'message', message );
 
     promTwilSend({
       body: message,
@@ -32,7 +31,6 @@ exports.massTwilSend = function(array){
       from: '+13122340362'
     })
     .then(function(data){
-      console.log('Message Successfully Sent');
     })
 
   }

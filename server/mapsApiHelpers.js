@@ -40,7 +40,6 @@ exports.getGeo = function(obj){
 //array is passed in from the google with response and body JSON objects
 exports.parseGeoResult = function (array){
 
-  console.log('got to parse geo');
   var result = JSON.parse(array[1]);
   result = result.results[0].geometry.location;
   result = [result.lng, result.lat];

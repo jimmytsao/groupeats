@@ -168,8 +168,8 @@ exports.request = function(req,res){
 
   //send text messages
   .then(twilio.massTwilSend);
-  
-  res.send(200, 'check request');
+
+  res.send(200); 
 };
 
 exports.sendRequestInfo = function(req,res){
@@ -193,7 +193,6 @@ exports.sendRequestInfo = function(req,res){
   })
   .then(function(data){
     res.send(200, data);
-    console.log('parsed records: ',data);
   })
 };
 

@@ -18,7 +18,7 @@ exports.massTwilSend = function(array){
   var formattedDate = misc.formatDate(obj.targetDateTime);
 
   var message = 'ID: ('+obj.requestId+') - Group of '+obj.groupSize+ ' on '+ formattedDate+'. Notes: '+obj.requestNotes
-                +'. Reply with the ID, either Accept or Decline, and your offer. Example: ('+obj.requestId+') - Accept - 10%off' ;
+                +'. To make an offer, reply with ('+obj.requestId+') # and your offer. Ex: ('+obj.requestId+') # 10%off' ;
 
 
   for (var i = 0; i<numbers.length; i++){
@@ -38,12 +38,3 @@ exports.massTwilSend = function(array){
   }
 
 }
-
-// twilio.messages.create({
-//     body: 'testing123',
-//     to: '+13124794923',
-//     from: '+13122340362',
-//   }, function(err,message){
-//     console.log('twilio send response: ', message);
-//   }
-// );

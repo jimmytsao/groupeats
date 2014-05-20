@@ -6,6 +6,7 @@ var busHandler = require('./server/busHandler.js');
 var dbConnect = require('./db/db-config.js');
 var app = express();
 var authen = require('./server/authenHelpers.js');
+var twiml = require('./server/twiml.js')
 
 
 // view engine setup
@@ -30,11 +31,11 @@ app.get('/business', busHandler.sendBusIndex);
 app.post('/business/login', busHandler.login);
 app.post('/business/signup', busHandler.signup);
 
+app.post('/twilio', twiml.processPost);
+
 //routes requiring authentication
 app.get('/dashboard', authen.userAuthenticate, userHandler.dashboard);
 app.post('/request', authen.userAuthenticate, userHandler.request);
-
-
 app.get('/business/dashboard', authen.busAuthenticate, busHandler.dashboard);
 
 module.exports = app;

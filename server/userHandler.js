@@ -90,6 +90,7 @@ exports.request = function(req,res){
   //parse the request form data
   var parsed = misc.parseRequestFormData(req.body);
   var requestObj;
+  var numbers;
 
   //get userId of requestor
   User.promGetUserId(req.session.userUsername)
@@ -111,13 +112,14 @@ exports.request = function(req,res){
   .then(function(data){
     parsed.requestId = data.count;
     requestObj = new UserRequest(parsed);
-    requestObj.save(function(err, data){
-      if(err){
-        console.log('INITIAL SAVE ERROR: ',err);
-      }
-    });
 
-    return new blue(function(resolve, reject){
+    requestObj.promSave = blue.promisify(requestObj.save);
+
+    return requestObj.promSave();
+  })
+
+  .then(function(){
+    return new blue(function(resolve,reject){
       resolve(parsed);
     })
   })
@@ -131,17 +133,24 @@ exports.request = function(req,res){
   //add long/lat results to location parameter on obj and save
   .then(function(result){
     requestObj.location = result;
-    requestObj.save(function(err, data){
-      if(err){
-        console.log('2nd SAVE ERROR: ', err);
-      }
-    });
 
-    //create new promise to continue chain
+    return requestObj.promSave();
+  })
+
+  .then(function(){
     return new blue (function(resolve, reject){
       resolve([requestObj.location, requestObj.radius]);
-    });
+    })
   })
+
+    // requestObj.save(function(err, data){
+    //   if(err){
+    //     console.log('2nd SAVE ERROR: ', err);
+    //   }
+    // });
+
+    //create new promise to continue chain
+
 
   //find businesses nearby the request location
   .then(Business.promFindNearby)
@@ -151,21 +160,19 @@ exports.request = function(req,res){
 
   //store the data as a parameter on the request Obj and save
   .then(function(data){
-    requestObj.businesses = data[0];
-
-    requestObj.save(function(err, data){
-      if(err){
-        console.log('3rd SAVE ERROR: ', err);
-      }
-      console.log('3rd Save Data: ', data);
-    })
+    requestObj.businesses = JSON.stringify(data[0]);
+    numbers = data[1];
+    return requestObj.promSave();
+  })
 
     //create new promise to continue chain
+  .then(function(){
     return new blue (function(resolve, reject){
-      resolve([data[1] ,requestObj]);
+      resolve([numbers, requestObj]);
     });
   })
 
+  //TODO: UNCOMMENT!
   .then(twilio.massTwilSend);
   
   res.send(200, 'check request');

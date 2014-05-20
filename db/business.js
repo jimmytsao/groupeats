@@ -66,7 +66,6 @@ businessSchema.pre('save', function(next){
     //move forward with saving
     next();
   })
-
 });
 
 var Business = mongoose.model('groupEatBusiness', businessSchema);
@@ -74,35 +73,28 @@ var Business = mongoose.model('groupEatBusiness', businessSchema);
 //converting model functions to promisified functions
 Business.promFind = blue.promisify(Business.find);
 Business.promFindOne = blue.promisify(Business.findOne);
-
 Business.blueAggregate = blue.promisify(Business.aggregate);
 
-Business.blueAggregate([{
-  $geoNear: {
-    near: [-122.415094,37.773899],
-    distanceField: 'dist.calculated',
-    maxDistance: 1900/3963,
-    spherical: true
-  }
-}])
-.then(function(result){
-  // console.log(result);
-})
+//argsArray contains 2 items: an Array of lon/lat coordinates and the radius
+Business.promFindNearby = function(argsArray){
+
+  //get long/lat coordinates and max distance in miles
+  location = argsArray[0];
+  maxDist = argsArray[1];
+
+  //Converting miles to radians. 3963 is the radius of the earth
+  convertedDistance = maxDist/3963; 
+
+  //return a promise that provides an array of restaurants that meet search criteria
+  return Business.blueAggregate([{
+    $geoNear: {
+      near: location,
+      distanceField: 'dist.calculated',
+      maxDistance: convertedDistance,
+      spherical: true
+    }
+  }]);
+};
 
 exports.Business = Business;
 
-// var test1 = new Business({
-//   businessName: 'Chicago',
-//   address: '517 W 26th St',
-//   city: 'Chicago',
-//   state: 'IL', 
-//   zipCode: 60616,
-//   username: 'tsao517',
-//   password: 'tsao517',
-//   firstName: 'chicago',
-//   lastName: 'home',  
-//   phoneNumber: 123423, 
-//   email: 'tsao517@gmail.com'
-// });
-
-// test1.save();

@@ -48,7 +48,6 @@ exports.login = function(req, res){
     console.log('business didnt find username');
     exports.businessSendAuthFail(res);
   })
-
 };
 
 exports.signup = function(req, res){
@@ -80,7 +79,6 @@ exports.signup = function(req, res){
     console.log('business signup failed ', e);
     exports.businessSendAuthFail(res);
   })
-
 };
 
 

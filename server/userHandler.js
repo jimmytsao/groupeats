@@ -2,6 +2,10 @@
 var User = require('../db/user.js').User;
 var prom = require('./promisified.js');
 var authen = require('./authenHelpers.js');
+var mapApi = require('./mapsApiHelpers.js');
+var blue = require('bluebird');
+var Business = require('../db/business.js').Business;
+var misc = require('./miscHelpers.js');
 
 exports.sendIndex = function (req, res){
   res.sendfile('./views/index.html');
@@ -14,7 +18,6 @@ exports.sendAuthFail = function (res){
 exports.dashboard = function(req, res, next){
   res.sendfile('./views/userDashboard.html');
 };
-
 
 exports.login = function(req, res){
 
@@ -47,7 +50,6 @@ exports.login = function(req, res){
     console.log('user didnt find username');   
     exports.sendAuthFail(res);
   })
-
 };
 
 exports.signup = function(req, res){
@@ -79,4 +81,35 @@ exports.signup = function(req, res){
     console.log('signup fail: ', e);
     exports.sendAuthFail(res);
   });
+};
+
+exports.request = function(req,res){
+
+  var requestObj = req.body;
+
+  mapApi.getGeo(requestObj)
+
+  //convert response to Long/Lat
+  .then(mapApi.parseGeoResult)
+
+  //update Long/Lat coordinates to location property
+  .then(function(result){
+    requestObj.location = result;
+
+    //make a promise that resolves with the result and miles
+    return new blue (function(resolve, reject){
+      resolve([requestObj.location, requestObj.radius]);
+    });
+  })
+
+  //find restaurants that meet search criteria
+  .then(Business.promFindNearby)
+
+  //parse the data for storage and generate list of nums to send text
+  .then(misc.parseNearbyData)
+
+  .then(function(data){
+    res.send('201', JSON.stringify(data));
+  })
+
 };

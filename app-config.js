@@ -32,6 +32,9 @@ app.post('/business/signup', busHandler.signup);
 
 //routes requiring authentication
 app.get('/dashboard', authen.userAuthenticate, userHandler.dashboard);
+app.post('/request', authen.userAuthenticate, userHandler.request);
+
+
 app.get('/business/dashboard', authen.busAuthenticate, busHandler.dashboard);
 
 module.exports = app;

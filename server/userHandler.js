@@ -18,7 +18,7 @@ exports.sendAuthFail = function (res){
 };
 
 exports.dashboard = function(req, res, next){
-  res.sendfile('./views/userDashboard.html');
+  res.sendfile('./public/html/userDash.html');
 };
 
 exports.login = function(req, res){
@@ -170,5 +170,40 @@ exports.request = function(req,res){
   .then(twilio.massTwilSend);
   
   res.send(200, 'check request');
+};
 
+exports.sendRequestInfo = function(req,res){
+
+  //get username from session info
+  var username = req.session.userUsername;
+
+  //get userID
+  User.promFindOne({username: username})
+  
+  //find records for that userId
+  .then(function(data){
+    return UserRequest.promFind({requesterId: data._id})
+  })
+
+  .then(function(data){
+
+    return new blue(function(resolve, reject){
+      resolve(misc.sendRequestInfoParser(data));
+    })
+  })
+  .then(function(data){
+    res.send(200, data);
+    console.log('parsed records: ',data);
+  })
+};
+
+exports.acceptOffer = function(req,res){
+  res.send(201);
+
+  UserRequest.promFindOne({requestId: req.body.requestId})
+  .then(function(data){
+    var number = misc.acceptOfferProcessing(data.businesses, req.body.businessName);
+
+    twilio.sendConfirmation(number,data.requestId, data.groupSize, data.targetDateTime);
+  })
 };

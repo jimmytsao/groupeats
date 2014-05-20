@@ -39,6 +39,7 @@ var UserRequest = mongoose.model('UserRequest', requestSchema);
 
 UserRequest.promFindOneAndUpdate = blue.promisify(UserRequest.findOneAndUpdate);
 UserRequest.promFindOne = blue.promisify(UserRequest.findOne);
+UserRequest.promFind = blue.promisify(UserRequest.find);
 
 exports.UserRequest = UserRequest;
 

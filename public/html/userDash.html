@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+  <head>
+    <title>GroupEats</title>
+    <script type="text/javascript" src='/bower_components/angular/angular.js'></script>
+    <script type="text/javascript" src='/javascripts/app.js'></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body ng-controller='mainCtrl'>
+    <div class='header'></div>
+      <span class='logo'>GroupEats</span>
+      <span class='username'>{{ username }}</span>
+      <a href="/logout"><button type='button'>Logout</button></a>
+
+      <div class='request'>
+        Submit a new request here:
+        <form action='/request' method='POST'>
+          <div><input type='text' name='address' placeholder='Starting Address'></div>
+          <div><input type='text' name='city' placeholder='City'></div>
+          <div><input type='text' name='state' placeholder='State'></div>
+          <div><input type='text' name='radius' placeholder='How far (miles)'></div>
+          <div><input type='date' name='targetDate' placeholder='When'></div>
+          <div><input type='time' name='targetTime' placeholder='What Time'></div>
+          <div><input type='text' name='groupSize'placeholder='Group Size'></div>
+          <div><input type='text' name='requestNotes' placeholder='Notes'></div>
+          <div><input type='submit' value='Submit Request'></div>
+        </form>
+      </div>
+
+      <div class='body' ng-Controller='contentCtrl'>
+        <table>
+          <caption>Active Requests</caption>
+          <tr>
+            <th>ID</th>
+            <th>Date/Time</th>
+            <th>Group Size</th>
+            <th>Notes</th>
+            <th>Offers</th>
+
+          </tr>
+          <tr ng-repeat='detail in details'>
+            <td>{{ detail.requestId }}</td>
+            <td>{{ detail.targetDateTime | date:'MM-dd HH:mm'}}</td>
+            <td>{{ detail.groupSize }}</td>
+            <td>{{ detail.requestNotes }}</td>
+            <td >
+              <div ng-repeat = 'items in detail.businesses'>
+                <ul>
+                  <li>
+                    <div>Business: {{items.businessName}}</div>
+                    <div>Offering: {{items.offer}}</div>
+                    <div>Location: {{items.address}}</div>
+                    <div>Distance {{items.distance | number:2}} miles</div>
+                    <div><button ng-click='acceptOffer(detail.requestId,items.businessName)' type='button'>Accept Offer</button></a></div>
+
+                  </li>
+                </ol>
+              </div>
+            </td>
+          </tr>
+        </table>    
+      </div>
+
+
+
+    <div class='footer'>by Jimmy Tsao</div>
+  </body>
+</html>

@@ -41,7 +41,7 @@ exports.massTwilSend = function(array){
 exports.sendConfirmation = function(number, orderId, size, time){
   var formattedNumber = '+1'+number;
   var formattedDate = misc.formatDate(time);
-  var message = 'Requestor of ('+orderId+') has accepted your offer! Their party of '+size+
+  var message = 'Request ('+orderId+') has accepted your offer! Their party of '+size+
       ' will arrive on '+formattedDate+'. Thanks for using GroupEats!'
   promTwilSend({
     body: message,

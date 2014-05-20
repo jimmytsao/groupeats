@@ -37,4 +37,9 @@ var User = mongoose.model('groupEatUsers', userSchema);
 User.promFind = blue.promisify(User.find);
 User.promFindOne = blue.promisify(User.findOne);
 
+User.promGetUserId = function(username){
+
+  return User.promFindOne({username: username});
+};
+
 exports.User = User;

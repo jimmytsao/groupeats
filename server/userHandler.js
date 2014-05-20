@@ -6,7 +6,9 @@ var mapApi = require('./mapsApiHelpers.js');
 var blue = require('bluebird');
 var Business = require('../db/business.js').Business;
 var misc = require('./miscHelpers.js');
-
+var twilio = require('./twilioApiHelpers.js');
+var UserRequest = require('../db/userRequest.js').UserRequest;
+var Counter = require('../db/counter.js').Counter;
 exports.sendIndex = function (req, res){
   res.sendfile('./views/index.html');
 };
@@ -85,31 +87,103 @@ exports.signup = function(req, res){
 
 exports.request = function(req,res){
 
-  var requestObj = req.body;
+  //parse the request form data
+  var parsed = misc.parseRequestFormData(req.body);
+  var requestObj;
 
-  mapApi.getGeo(requestObj)
+  //get userId of requestor
+  User.promGetUserId(req.session.userUsername)
+
+  //update the parsed object info with the requestorId
+  .then(function(data){
+    parsed.requesterId = data._id; //NOTE: may have issues later since we saved the id as a string
+
+    //start another promise to keep the chain going
+    return new blue(function(resolve, reject){
+      resolve(req.session.userUsername);
+    });
+  })
+
+  //get the next request counter number
+  .then(Counter.getRequestsCounter)
+
+  //update the parsed object info with the request counter
+  .then(function(data){
+    parsed.requestId = data.count;
+    requestObj = new UserRequest(parsed);
+    requestObj.save(function(err, data){
+      if(err){
+        console.log('INITIAL SAVE ERROR: ',err);
+      }
+    });
+
+    return new blue(function(resolve, reject){
+      resolve(parsed);
+    })
+  })
+
+  //get Long/Lat from google maps
+  .then(mapApi.getGeo)
 
   //convert response to Long/Lat
   .then(mapApi.parseGeoResult)
 
-  //update Long/Lat coordinates to location property
   .then(function(result){
     requestObj.location = result;
+    requestObj.save(function(err, data){
+      if(err){
+        console.log('2nd SAVE ERROR: ', err);
+      }
+    });
 
-    //make a promise that resolves with the result and miles
     return new blue (function(resolve, reject){
       resolve([requestObj.location, requestObj.radius]);
     });
   })
 
-  //find restaurants that meet search criteria
   .then(Business.promFindNearby)
 
-  //parse the data for storage and generate list of nums to send text
   .then(misc.parseNearbyData)
 
   .then(function(data){
-    res.send('201', JSON.stringify(data));
+    requestObj.businesses = data[0];
+
+    requestObj.save(function(err, data){
+      if(err){
+        console.log('2nd SAVE ERROR: ', err);
+      }
+      console.log('3rd Save Data: ', data);
+    })
   })
+
+  res.send(200, 'check request');
+
+  // mapApi.getGeo(requestObj)
+
+  // //convert response to Long/Lat
+  // .then(mapApi.parseGeoResult)
+
+  // //update Long/Lat coordinates to location property
+  // .then(function(result){
+  //   requestObj.location = result;
+
+  //   //make a promise that resolves with the result and miles
+  //   return new blue (function(resolve, reject){
+  //     resolve([requestObj.location, requestObj.radius]);
+  //   });
+  // })
+
+  // //find restaurants that meet search criteria
+  // .then(Business.promFindNearby)
+
+  // //parse the data for storage and generate list of nums to send text
+  // .then(misc.parseNearbyData)
+
+  // .then(function(data){
+  //   request.Obj.businesses = data[0];
+
+  //   //TODO - finish after setting up the model
+  //   res.send('201', JSON.stringify(data));
+  // })
 
 };

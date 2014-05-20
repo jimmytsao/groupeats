@@ -1,3 +1,4 @@
+
 var blue = require('bluebird');
 
 exports.parseNearbyData = function(array){
@@ -11,7 +12,6 @@ exports.parseNearbyData = function(array){
     bus.distance = array[i].dist.calculated*3963;
     bus.status = 'Pending';
     bus.replies = [];
-    bus.sms_id = 1;
 
     allBus.push(bus);
     phoneNums.push(array[i].phoneNumber);
@@ -25,4 +25,26 @@ exports.parseNearbyData = function(array){
   });
 
 };
+
+exports.parseRequestFormData = function(obj){
+
+  var dateTime = obj.targetDate+' '+obj.targetTime;
+
+  var parsedObj = {
+    targetDateTime: new Date (dateTime),
+    groupSize: obj.groupSize,
+    requestNotes: obj.requestNotes,
+    address: obj.address,
+    city: obj.city,
+    state: obj.state,
+    radius: obj.radius,
+    active: true
+  }
+
+  return parsedObj;
+ }
+
+
+
+
 

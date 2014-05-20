@@ -34,7 +34,7 @@ exports.processPost = function(req, res, next){
 
   .then(function(data){
 
-    sendXml(res, 'Heres my offer: '+offer);
+    sendXml(res, 'Thanks! We will let the requester know of your offer: '+offer);
   })
 };
 

@@ -26,6 +26,7 @@ app.get('/', userHandler.sendIndex);
 app.post('/login', userHandler.login);
 app.post('/signup', userHandler.signup);
 app.get('/logout', authen.logout);
+app.get('/about', userHandler.sendAbout);
 
 //Public business routes
 app.get('/business', busHandler.sendBusIndex);

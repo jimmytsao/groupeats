@@ -21,10 +21,23 @@
           <div><input type='text' ng-model='city' name='city' placeholder='City'></div>
           <div><input type='text' ng-model='state' name='state' placeholder='State'></div>
           <div><input type='text' ng-model='radius' name='radius' placeholder='How far (miles)'></div>
-          <div><input type='date' ng-model='targetDate' name='targetDate' placeholder='When'></div>
-          <div><input type='time' ng-model='targetTime' name='targetTime' placeholder='What Time'></div>
+          <!-- <div><input type='date' ng-model='targetDate' name='targetDate' placeholder='When'></div> -->
+          <!-- <div><input type='time' ng-model='targetTime' name='targetTime' placeholder='What Time'></div> -->
+
           <div><input type='text' ng-model='groupSize' name='groupSize'placeholder='Group Size'></div>
           <div><input type='text' ng-model='requestNotes' name='requestNotes' placeholder='Notes'></div>
+          <div>
+            When:
+            <select ng-model ='targetTime'>
+              <option value='0'>Pronto</option>
+              <option value='15'>15 mins</option>
+              <option value='30'>30 mins</option>
+              <option value='45'>45 mins</option>
+              <option value='60'>1 hr</option>
+              <option value='90'>1.5 hrs</option>
+              <option value='120'>2 hrs</option>
+            </select> 
+          </div>
           <div><input type='submit' value='Submit Request'></div>
         </form>
       </div>

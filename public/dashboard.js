@@ -4,6 +4,7 @@ var app = angular.module('app', []);
 app.controller('mainCtrl', function($scope, $http){
 
   $scope.sendRequest = function(){
+
     var message = {
       address: $scope.address,
       city: $scope.city,
@@ -14,6 +15,8 @@ app.controller('mainCtrl', function($scope, $http){
       groupSize: $scope.groupSize,
       requestNotes: $scope.requestNotes
     };
+
+    console.log('request form data: ',message);
 
     $http({
       method: 'POST',

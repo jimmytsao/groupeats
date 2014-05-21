@@ -13,6 +13,9 @@ exports.sendIndex = function (req, res){
   res.sendfile('./views/index.html');
 };
 
+exports.sendAbout = function(req, res){
+  res.sendfile('./public/html/about.html');  
+}
 exports.sendAuthFail = function (res){
   res.send(404, 'failed authentication!');
 };

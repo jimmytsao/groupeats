@@ -74,7 +74,7 @@ app.controller('contentCtrl', function($scope, $http){
 
 
     }).success(function(data, status) {
-      alert('A confirmation message has been sent to the restaurant. Thanks for using GroupEats!!');
+      alert('A confirmation message has been sent to the restaurant. Thanks for using Pronto!!');
 
     }).error(function(data, status){
       console.log('unsuccessful error getting data', data, status);

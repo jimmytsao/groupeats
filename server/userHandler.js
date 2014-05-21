@@ -56,6 +56,7 @@ exports.login = function(req, res){
 
 exports.signup = function(req, res){
 
+  console.log('got to user signup');
   //check to see if user username exists in database
   User.promFindOne({username: req.body.username})
   .then(function(data){
@@ -72,7 +73,8 @@ exports.signup = function(req, res){
           console.log('issue saving new user account');
           exports.sendAuthFail(res);    
         } else {
-          res.sendfile('./views/userDashboard.html');
+          authen.userCreateSession(req);
+          res.redirect(302,'/dashboard');
         }
       });
     }

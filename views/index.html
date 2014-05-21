@@ -7,21 +7,25 @@
   <body>
     
     <div class='header'>
-      <div class='sitename'>
-        <h1>groupeats</h1>
+      <div>
+        <h1 class='sitename'>GroupEats</h1>
+        <p></p>
+        <p></p>
       </div>
       <div class='login'>
+        Signup Here:
+
         <form action='/login' method='POST'>
           <input type='text' name='username' placeholder='Username'>
-          <input type='password' name='password' placeholder='Password'>
+          <div><input type='password' name='password' placeholder='Password'></div>
           <input type='submit' value='Login'>
         </form>
       </div>
-      <div><a href="/business">Business Users</a></div>
     </div>
 
     <div class='content'>
-      <div class='info'>Page Info</div>
+      <p></p>
+
       <div class='signup'>
         Signup Here:
         <form action='/signup' method='POST'>
@@ -31,10 +35,12 @@
           <div><input type='text' name='phoneNumber'placeholder='Phone Number'></div>
           <div><input type='text' name='username' placeholder='Username'></div>
           <div><input type='password' name='password' placeholder='Password'></div>
-          <div><input type='submit' value='Submit'></div>
+          <div><input type='submit' value='Signup'></div>
         </form>
       </div>
     </div>
+    <p></p>
+        <div><a href="/business">Business Users Click Here</a></div>
 
   </body>
 </html>

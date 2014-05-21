@@ -1,29 +1,37 @@
-.sitename {
-  float: left;
-  display: inline;
+body {
+  margin-right: auto;
+  margin-left: auto;
+  height: 700px;
+  width: 800px;
+  font-family: Trebuchet MS;
+  text-align: center;
 }
-.login {
+input {
+  height: 20px;
+  width: 150px;
+  border-radius: 5px;
+}
+p {
+  font-size: 20pt;
+}
+html {
+  background-color: #FFE773;
+}
+.logout {
   float: right;
-  display: inline;
 }
-.content {
-  clear: left;
-  display: block;
+table {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  border-collapse: collapse;
 }
-.info {
-  float: left;
-  clear: left;
-  display: inline;
-}
-.signup {
-  float: left;
-  clear: left;
-  display: block;
-}
-a {
-  color: #00B7FF;
-}
-.ui {
-  height: 500px;
-  width: 500px;
+td,
+th {
+  vertical-align: center;
+  border: 1px solid #33CC00;
+  padding-top: 7px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 7px;
 }

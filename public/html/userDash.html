@@ -9,12 +9,12 @@
 
   <body ng-controller='mainCtrl'>
     <div class='header'></div>
-      <span class='logo'>GroupEats</span>
-      <span class='username'>{{ username }}</span>
-      <a href="/logout"><button type='button'>Logout</button></a>
-
+      <h1><span class='logo'>GroupEats</span></h1>
+<!--       <a class='logout' href="/logout"><button type='button'>Logout</button></a>
+ -->
       <div class='request'>
         Submit a new request here:
+        <p></p>
         <!-- action='/request' method='POST'  -->
         <form ng-submit='sendRequest()'>
           <div><input type='text' ng-model='address' name='address' placeholder='Starting Address'></div>
@@ -30,8 +30,9 @@
       </div>
 
       <div class='body' ng-Controller='contentCtrl'>
+        <p></p>
         <table>
-          <caption>Active Requests</caption>
+          <caption><h3>Current Requests</h3></caption>
           <tr>
             <th>ID</th>
             <th>Date/Time</th>
@@ -47,24 +48,19 @@
             <td>{{ detail.requestNotes }}</td>
             <td >
               <div ng-repeat = 'items in detail.businesses'>
-                <ul>
-                  <li>
-                    <div>Business: {{items.businessName}}</div>
-                    <div>Offering: {{items.offer}}</div>
-                    <div>Location: {{items.address}}</div>
-                    <div>Distance {{items.distance | number:2}} miles</div>
-                    <div><button ng-click='acceptOffer(detail.requestId,items.businessName)' type='button'>Accept Offer</button></a></div>
-
-                  </li>
-                </ol>
+                <div>
+                  <div>Business: {{items.businessName}}</div>
+                  <div>Offering: {{items.offer}}</div>
+                  <div>Location: {{items.address}}</div>
+                  <div>Distance {{items.distance | number:2}} miles</div>
+                  <div><button ng-click='acceptOffer(detail.requestId,items.businessName)' type='button'>Accept Offer</button></a></div>
+                </div>
               </div>
             </td>
           </tr>
         </table>    
       </div>
-
-
-
+    <p>
     <div class='footer'>by Jimmy Tsao</div>
   </body>
 </html>
